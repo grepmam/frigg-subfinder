@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use lib './lib';
+
+use Frigg::CLI;
+use Frigg::Active;
+use Frigg::Passive;
+
+use Frigg::helpers::Banner;
+use Frigg::helpers::Help;
+use Frigg::helpers::Version;
+
+
+sub run_cli {
+
+    my $command = shift @ARGV;
+    my $cli = create_cli();
+    $cli->run( $command );
+
+    return;
+
+}
+
+
+sub create_cli {
+
+    my $cli = Frigg::CLI->new;
+
+    $cli->add_command( 'active', sub { Frigg::Active::run() } );
+    $cli->add_command( 'passive', sub { Frigg::Passive::run() } );
+    $cli->add_command( 'version', sub { Frigg::helpers::Version::display_version() } );
+    $cli->add_command( 'help', sub { Frigg::helpers::Help::display_main_usage() } );
+
+    return $cli;
+
+}
+
+
+Frigg::helpers::Banner::display_banner();
+run_cli();
+exit;
